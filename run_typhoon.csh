@@ -4,10 +4,11 @@
 setenv ROOT_DIR "/Users/pchengnirvana/Modeling/for_MMY"
 setenv src_dir "$ROOT_DIR/src"
 setenv data_dir "$ROOT_DIR/data"
+setenv ctl_dir  "$ROOT_DIR/data"
 setenv out_dir "$ROOT_DIR/outputs"
 
 # set typhoon number list
-set typhoon_list = (103)
+set typhoon_list = (54)
 
 # set wrfout settings
 setenv domain 3
@@ -30,7 +31,7 @@ setenv executable "typhoon.exe"
 set pattern = 'tdef'
 
 # debug option, T or F
-setenv debug 'T'
+setenv debug 'F'
 
 # check directories
 if (! -e $ROOT_DIR) then
@@ -52,7 +53,8 @@ foreach typhoon ( $typhoon_list )
   setenv typhoon_id $typhoon
 
   # now grep typhoon tdef value from .ctl file
-  setenv nt `grep $pattern $data_dir/$typhoon_id/${typhoon_id}*.ctl |  awk '{print $2}'`
+  #setenv nt `grep $pattern $data_dir/$typhoon_id/${typhoon_id}*.ctl |  awk '{print $2}'`
+  setenv nt `grep $pattern $ctl_dir/$typhoon_id/${typhoon_id}*.ctl |  awk '{print $2}'`
   echo "nt value set to $nt"
 
   # run executables

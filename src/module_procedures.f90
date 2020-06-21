@@ -13,7 +13,7 @@ contains
     integer :: iostats
 
     newstring = trim(adjustl(string))
-    read(trim(newstring), *, iostat = iostats) x
+    read(newstring, *, iostat = iostats) x
     is_numeric = iostats == 0
   end function is_numeric
 

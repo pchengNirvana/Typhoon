@@ -8,7 +8,8 @@ program typhoon
   call read_env_settings
 
   ! check and open input file
-  in_dir = trim(data_dir)//'/'//trim(typhoon_id)
+  !in_dir = trim(data_dir)//'/'//trim(typhoon_id)
+  in_dir = trim(data_dir)
   in_file = trim(typhoon_id)//'_d'//domain//trim(in_file_suffix)
   inquire(file = trim(in_dir)//'/'//trim(in_file), exist = exists)
   if (.not. exists) call error_message_file_not_exist(trim(in_dir)//'/'// &
@@ -26,7 +27,7 @@ program typhoon
            v10(nx, ny, nz, nt), &
            slp(nx, ny, nz, nt), &
            tcx(nz, nt), &
-           tcy(ny, nt), &
+           tcy(nz, nt), &
            smn(nz, nt), & ! *** can dim 1 be nz or has to be 1 *** !
            r17(nt), &
            ur(nx, ny, nz, nt), &
@@ -81,8 +82,9 @@ program typhoon
 
   ! debug setting
   if (debug) then
-    write(*, *) tcx
-    write(*, *) tcy
+    print*, size(tcx)
+    print*, size(tcy)
+    print*, sum(u10), sum(v10), sum(slp)
   end if
 
   ! comment place holder
