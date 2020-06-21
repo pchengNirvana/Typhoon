@@ -37,6 +37,7 @@ setenv executable "typhoon.exe"
 setenv debug 'TRUE'
 
 # do we want to use .nc file; False by default
+# under development
 setenv use_netcdf 'FALSE'
 
 # check directories

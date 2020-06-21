@@ -79,6 +79,8 @@ contains
 
     ! if use_netcdf == .true., read .nc directory and filename
     if (use_netcdf) then
+      write(*, '(a)') 'ERROR: netcdf function is under development'
+      stop
       env_name = 'nc_dir'
       call get_environment_variable(trim(env_name), env)
       if (trim(adjustl(env)) == '') &
