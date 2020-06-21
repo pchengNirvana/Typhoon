@@ -1,9 +1,11 @@
 module module_debug
+  ! Written by P. Cheng
   implicit none
 
 contains
 
-  subroutine message_text (text)
+  subroutine message_text &
+    (text)
     implicit none
 
     character(len = *), intent (in) :: text
@@ -11,7 +13,22 @@ contains
     write(*, '(a)') text
   end subroutine message_text
 
-  subroutine check_in_file_exists (directory, filename)
+  subroutine debug_dimension_settings &
+    (nx, ny, nz, nt, nr)
+    implicit none
+
+    integer, intent (in) :: nx, ny, nz, nt, nr
+
+    write(*, '(a)') 'DEBUG: Current dimension setting is: '
+    write(*, '(a, i4)') '       nx = ', nx
+    write(*, '(a, i4)') '       ny = ', ny
+    write(*, '(a, i4)') '       nz = ', nz
+    write(*, '(a, i4)') '       nt = ', nt
+    write(*, '(a, i4)') '       nr = ', nr
+  end subroutine debug_dimension_settings
+
+  subroutine check_in_file_exists &
+    (directory, filename)
     implicit none
 
     character(len = *), intent (in) :: directory, filename
@@ -26,7 +43,8 @@ contains
     end if
   end subroutine check_in_file_exists
 
-  subroutine check_in_directory_exists (directory)
+  subroutine check_in_directory_exists &
+    (directory)
     implicit none
 
     character(len = *), intent (in) :: directory
@@ -40,7 +58,28 @@ contains
     end if
   end subroutine check_in_directory_exists
 
-  subroutine check_out_directory_exists (directory)
+  subroutine debug_in_file &
+    (directory, filename)
+    implicit none
+
+    character(len = *), intent (in) :: directory, filename
+
+    write(*, '(a)') 'DEBUG: Input file: '//directory//'/'//filename
+  end subroutine debug_in_file
+
+  subroutine debug_check_read_variables &
+    (nx, ny, nz, nt, u10, v10, slp)
+    implicit none
+
+    integer, intent (in) :: nx, ny, nz, nt
+    real(4), intent (in), optional :: u10(nx, ny, nt)
+    real(4), intent (in), optional :: v10(nx, ny, nt)
+    real(4), intent (in), optional :: slp(nx, ny, nt)
+
+  end subroutine debug_check_read_variables
+
+  subroutine check_out_directory_exists &
+    (directory)
     implicit none
 
     character(len = *), intent (in) :: directory
@@ -54,15 +93,8 @@ contains
     end if
   end subroutine check_out_directory_exists
 
-  subroutine debug_in_file (directory, filename)
-    implicit none
-
-    character(len = *), intent (in) :: directory, filename
-
-    write(*, '(a)') 'DEBUG: Input file: '//directory//'/'//filename
-  end subroutine debug_in_file
-
-  subroutine debug_out_file (directory, filename)
+  subroutine debug_out_file &
+    (directory, filename)
     implicit none
 
     character(len = *), intent (in) :: directory, filename
@@ -70,7 +102,8 @@ contains
     write(*, '(a)') 'DEBUG: Output file: '//directory//'/'//filename
   end subroutine debug_out_file
 
-  subroutine error_message_text (text)
+  subroutine error_message_text &
+    (text)
     implicit none
 
     character(len = *), intent (in) :: text
@@ -79,40 +112,36 @@ contains
     stop
   end subroutine error_message_text
 
-  subroutine error_message_env_not_set (text)
+  subroutine error_message_env_not_set &
+    (text)
     implicit none
 
     character(len = *), intent (in) :: text
 
-    write(*, '(a)') 'ERROR: Variable is not set in the environment: '//text
+    write(*, '(a)') 'ERROR: Environment variable is not set: '//text
     stop
   end subroutine error_message_env_not_set
 
-  subroutine error_message_var_not_numeric (text)
-    implicit none
-
-    character(len = *), intent (in) :: text
-
-    write(*, '(a)') 'ERROR: Variable is not a number: '//text
-    stop
-  end subroutine error_message_var_not_numeric
-
-  subroutine error_message_domain_number_exceed (text)
-    implicit none
-
-    character(len = *), intent (in) :: text
-
-    write(*, '(a)') 'ERROR: Output domain number exceeds 99: '//text
-    stop
-  end subroutine error_message_domain_number_exceed
-
-  subroutine error_message_unknown (text, text2)
+  subroutine error_message_env_not_number &
+    (text, text2)
     implicit none
 
     character(len = *), intent (in) :: text, text2
 
-    write(*, '(a)') 'ERROR: Unknown variable setting: '//text//' = '//text2
+    write(*, '(a)') 'ERROR: Environment variable is not a number: '//&
+      text//' = '//text2
     stop
-  end subroutine error_message_unknown
+  end subroutine error_message_env_not_number
+
+  subroutine error_message_env_unknown &
+    (text, text2)
+    implicit none
+
+    character(len = *), intent (in) :: text, text2
+
+    write(*, '(a)') 'ERROR: Unknown environment variable setting: '// &
+      text//' = '//text2
+    stop
+  end subroutine error_message_env_unknown
 
 end module module_debug
