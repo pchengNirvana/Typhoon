@@ -52,10 +52,10 @@ if (! -e $dat_dir) then
   echo "Error: Data directory $ctl_dir does not exist"
   exit
 endif
-if (! -e $nc_dir) then
-  echo "Creating output directory: $nc_dir"
-  mkdir -p $nc_dir
-endif
+#if (! -e $nc_dir) then
+#  echo "Creating output directory: $nc_dir"
+#  mkdir -p $nc_dir
+#endif
 if (! -e $out_dir) then
   echo "Creating output directory: $out_dir"
   mkdir -p $out_dir
@@ -116,6 +116,8 @@ foreach typhoon ( $typhoon_list )
       setenv nt $tmax
     endif
   endif
+  # grep undefined value
+  setenv nan_val `grep undef $ctl_dir/$typhoon/$ctl_file | awk '{print $2}'`
 
   # run executables
   cd $src_dir

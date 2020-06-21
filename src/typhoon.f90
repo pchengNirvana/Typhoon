@@ -73,15 +73,14 @@ program typhoon
     call read_dat_file(trim(dat_dir), trim(dat_file), nx, ny, nz, zmax, nt, &
       file_recl, u10 = u10, v10 = v10, slp = slp)
    if (debug) then
-      call debug_check_read_variables(nx, ny, nz, nt, &
+      call debug_check_read_variables(nx, ny, nz, nt, nan_val, &
         u10 = u10, v10 = v10, slp = slp)
     end if
   else
     call check_in_file_exists(trim(nc_dir), trim(nc_file))
     if (debug) call debug_in_file(trim(nc_dir), trim(nc_file))
   end if
-print*, sum(u10), sum(v10), sum(slp)
-stop
+
   !!!!!!!!!!!!!!!! now start calculating derived data !!!!!!!!!!!!!!!!!
   ! allocate derived array
   allocate(tcx(nz, nt))
@@ -95,11 +94,16 @@ stop
 !  allocate(hb(nr, nz, nt))
   allocate(r17(nt))
 
+  ! assign initial value
+  smn = 0.
+  tcx = 0.
+  tcy = 0.
+
   ! I would recommend to write calculations in module_procedures.f90, and
   ! load it when nessary using 'use module_procedures, only : <subroutine name>
   ! like what I did for calculating r17 below
   ! loop over each dimension to find smn, tcx, tcy
-  loop_t_1: do t = 1, nt
+  loop_t_1: do l = 1, nt
     loop_z_1: do k = 1, nz
       smn(k, l) = slp(120, 120, l) ! *** what is this 120 *** !
       loop_y_1: do j = 1, ny
@@ -113,6 +117,10 @@ stop
       end do loop_y_1
     end do loop_z_1
   end do loop_t_1
+  if (debug) then
+    !print*, tcx
+    !print*, tcy
+  end if
 
   ! convert u10/v10 to polar coordinate
   call coordinate(nx, ny, nz, nt, u10, v10, tcx, tcy, ur, vt)

@@ -131,6 +131,7 @@ contains
       end if
 
       ! read 3D variables
+      ! loop over vertical dimension
       loop_z: do k = 1, nz
         if (present(u)) then
           read(lun, rec = 0*zmax + 2 + k + (l-1)*tb) &

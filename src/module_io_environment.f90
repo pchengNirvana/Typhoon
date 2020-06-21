@@ -175,6 +175,17 @@ contains
     else
       read(env, *) nr
     end if
+
+    ! read and check nan value
+    env_name = 'nan_val'
+    call get_environment_variable(trim(env_name), env)
+    if (trim(adjustl(env)) == '') &
+      call error_message_env_not_set(trim(env_name))
+    if (.not. is_numeric(trim(adjustl(env)))) then
+      call error_message_env_not_number(trim(env_name), trim(adjustl(env)))
+    else
+      read(env, *) nan_val
+    end if
   end subroutine read_env_settings
 
 end module module_io_environment

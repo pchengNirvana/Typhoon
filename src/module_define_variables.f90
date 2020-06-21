@@ -14,7 +14,8 @@ module module_define_variables
 
   ! dimensions and indices
   integer :: nx, ny, nz, nt, nr, zmax, tmax
-  integer :: i, j, k, l, t, r
+  integer :: i, j, k, l, r
+  real(4) :: nan_val
 
   ! .dat 2D variables variables
   real(4), allocatable :: xlat(:, :, :)
