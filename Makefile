@@ -5,7 +5,7 @@
 ROOT = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 SRCDIR = $(PWD)/src
 
-FC     = mpif90
+FC      = $(F90)
 LIBS    = -L$(NETCDF)/lib -lnetcdff
 INCLUDE = -I$(NETCDF)/include
 
@@ -16,11 +16,11 @@ else
 endif
 
 ifeq ($(FC),pgf90)
-  FFLAGS += -Mnosave -Ktrap=fp -Kieee
+  FFLAGS += -Mfree -Mnosave -Ktrap=fp -Kieee
 endif
 
 ifeq ($(FC),mpif90)
-#  FFLAGS += -Mnosave -Ktrap=fp -Kieee
+  FFLAGS += -free #-Mnosave -Ktrap=fp -Kieee
   MOSSCO_FFLAGS += -DNO_ISO_FORTRAN_ENV
 endif
 
@@ -47,10 +47,6 @@ fOBJ = \
 fSRC = \
  typhoon.f90
 
-extraOBJ = \
- a.o \
- b.o
-
 oDEF = $(fDEF:.f90=.o)
 
 oOBJ = $(fOBJ:.f90=.o)
@@ -62,6 +58,12 @@ fMOD = $(fDEF) $(fOBJ)
 MODULES = $(fMOD:.f90=.mod)
 
 EXEC = $(fSRC:.f90=.exe)
+
+extraSRC = \
+ coordinate.f90 \
+ symmetric.f90
+
+extraOBJ = $(extraSRC:.f90=.o)
 
 #
 #  ------------------------------  Build:  ----------------------------------
@@ -79,7 +81,7 @@ build:
 
 $(oOBJ): $(oDEF)
 
-$(EXEC): $(oDEF) $(oOBJ) $(oSRC)
+$(EXEC): $(oDEF) $(oOBJ) $(oSRC) $(extraOBJ)
 	$(FC) -o $@ $(@:.exe=.o) $(extraOBJ) $(oDEF) $(oOBJ) $(LIBS) $(MOSSCO_FFLAGS)
 
 #
@@ -91,7 +93,7 @@ SUBDIRSCLEAN=$(addsuffix clean,$(SUBDIRS))
 clean: $(SUBDIRSCLEAN)
 
 clean_subdirs:
-	rm -f $(MODULES) $(EXEC) $(oDEF) $(oOBJ) $(oSRC)
+	rm -f $(MODULES) $(EXEC) $(oDEF) $(oOBJ) $(oSRC) $(extraOBJ)
 
 %clean: %
 	$(MAKE) -C $< -f $(PWD)/Makefile clean_subdirs

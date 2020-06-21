@@ -86,8 +86,8 @@ program typhoon
   end if
 
   ! comment place holder
-  ! call coordinate(u10, v10, ur, vt, nx, ny, nz, nt, tcx, tcy)
-  ! call symmetric(vt, vtb, nx, ny, nz, nt, tcx, tcy, nr)
+  call coordinate(u10, v10, ur, vt, nx, ny, nz, nt, tcx, tcy)
+  call symmetric(vt, vtb, nx, ny, nz, nt, tcx, tcy, nr)
 
   ! calculate typhoon size (?) r17
   r17(:) = 0.
