@@ -108,7 +108,7 @@ foreach typhoon ( $typhoon_list )
     endif
   endif
   # tmax will be retrieved no matter if it is asked for
-  setenv tmax `grep zdef $ctl_dir/$typhoon/$ctl_file | awk '{print $2}'`
+  setenv tmax `grep tdef $ctl_dir/$typhoon/$ctl_file | awk '{print $2}'`
   if ( ! $?nt ) then
     setenv nt $tmax
   else
