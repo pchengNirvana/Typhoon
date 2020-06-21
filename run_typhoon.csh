@@ -49,7 +49,7 @@ if (! -e $dat_dir) then
   echo "Error: Data directory $dat_dir does not exist"
   exit
 endif
-if (! -e $dat_dir) then
+if (! -e $ctl_dir) then
   echo "Error: Data directory $ctl_dir does not exist"
   exit
 endif
