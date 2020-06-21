@@ -2,7 +2,7 @@
 
 # set directories and filename examples
 ### NOTE: The script assumes that we can find (will create) these files at the following location
-###   .dat - $dat_dir/$dat_example
+###   .dat - $dat_dir/$typhoon/$dat_example
 ###   .ctl - $ctl_dir/$typhoon/$ctl_example
 ###   .nc  - $nc_dir/$nc_example
 ###   .txt - $out_dir/$out_example
@@ -73,9 +73,13 @@ if ( $domain != $domain_ctl || $domain != $domain_nc ) then
 endif
 set example_typhoon = `echo $dat_example | cut -d\_ -f1`
 
+# do tricks
+set dat_dir_bck = $dat_dir
+
 # loop over each typhoon in the id list
 foreach typhoon ( $typhoon_list )
   echo "Working on typhoon #$typhoon"
+  setenv dat_dir $dat_dir_bck/$typhoon
 
   # now set input and output filenames 
   setenv dat_file `echo $dat_example | sed "s/$example_typhoon/$typhoon/"`
