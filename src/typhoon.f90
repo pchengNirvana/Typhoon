@@ -1,43 +1,45 @@
 program typhoon
-  use module_def_vars
-  use module_io_main, only : read_env_settings
-  use module_messages, only : error_message_file_not_exist
+  use module_define_constants
+  use module_define_variables
+  use module_io_environment, only : read_env_settings
+  use module_io_main, only : write_r17
+  use module_procedures, only : coordinate, symmetric, calculate_r17
+  use module_debug, only : debug_in_file, debug_out_file, &
+    check_in_file_exists
   implicit none
 
   ! read environment settings
   call read_env_settings
 
   ! check and open input file
-  !in_dir = trim(data_dir)//'/'//trim(typhoon_id)
-  in_dir = trim(data_dir)
-  in_file = trim(typhoon_id)//'_d'//domain//trim(in_file_suffix)
-  inquire(file = trim(in_dir)//'/'//trim(in_file), exist = exists)
-  if (.not. exists) call error_message_file_not_exist(trim(in_dir)//'/'// &
-    trim(in_file))
-  open(lun, file = trim(in_dir)//'/'//trim(in_file), form = "unformatted", &
+  dat_dir = trim(dat_dir) !!! dat_dir
+  dat_file = trim(typhoon_id)//'_d'//domain//trim(in_file_suffix)
+  call check_in_file_exists(trim(dat_dir), trim(dat_file))
+  if (debug) call debug_in_file(trim(dat_dir), trim(dat_file))
+  open(lun, file = trim(dat_dir)//'/'//trim(dat_file), form = "unformatted", &
     access = 'direct', status = 'old', recl = (nx*ny)*file_recl)
 
-  ! allocate main variable arrays to store wrfout variables
-  allocate(u(nx, ny, nz, nt), & ! *** unused array *** !
-           v(nx, ny, nz, nt), & ! *** unused array *** !
-           p(nx, ny, nz, nt), & ! *** unused array *** !
-           w(nx, ny, nz, nt), & ! *** unused array *** !
-           h(nx, ny, nz, nt), & ! *** unused array *** !
+  !!!!!!!!!!! allocate main variable arrays !!!!!!!!!!!
+  allocate(u(nx, ny, nz, nt), &
+           v(nx, ny, nz, nt), &
+           p(nx, ny, nz, nt), &
+           w(nx, ny, nz, nt), &
+           h(nx, ny, nz, nt), &
            u10(nx, ny, nz, nt), &
            v10(nx, ny, nz, nt), &
            slp(nx, ny, nz, nt), &
            tcx(nz, nt), &
            tcy(nz, nt), &
-           smn(nz, nt), & ! *** can dim 1 be nz or has to be 1 *** !
-           r17(nt), &
+           smn(nz, nt), &
            ur(nx, ny, nz, nt), &
            vt(nx, ny, nz, nt), &
            vtb(nr, nz, nt), &
-           urb(nr, nz, nt), & ! *** unused array *** !
-           wb(nr, nz, nt), &  ! *** unused array *** !
-           hb(nr, nz, nt))    ! *** unused array *** !
+           urb(nr, nz, nt), &
+           wb(nr, nz, nt), &
+           hb(nr, nz, nt))
 
-  ! read data from input file
+  !!!!!!!!!!! read data from input file !!!!!!!!!!!
+  
   uvrec = 0 ! record location in .dat file
 
   ! read var #1 - slp
@@ -81,39 +83,24 @@ program typhoon
   end do loop_t_1
 
   ! debug setting
-  if (debug) then
-    print*, size(tcx)
-    print*, size(tcy)
-    print*, sum(u10), sum(v10), sum(slp)
-  end if
+!  if (debug) then
+!    print*, size(tcx)
+!    print*, size(tcy)
+!    print*, sum(u10), sum(v10), sum(slp)
+!  end if
 
   ! comment place holder
-  call coordinate(u10, v10, ur, vt, nx, ny, nz, nt, tcx, tcy)
-  call symmetric(vt, vtb, nx, ny, nz, nt, tcx, tcy, nr)
+  call coordinate(nx, ny, nz, nt, u10, v10, tcx, tcy, ur, vt)
+  call symmetric(nx, ny, nz, nt, nr, tcx, tcy, vt, vtb)
 
-  ! calculate typhoon size (?) r17
-  r17(:) = 0.
-  loop_t_2: do t = 1, nt
-    loop_z_2: do k = 1, nz
-      loop_r_2: do i = 1, nr-1
-        if ((vtb(i, k, t) .gt. 17) .and. (vtb(i+1, k, t) .lt. 17)) then
-          r17(t) = i * 2.
-        end if
-      end do loop_r_2
-    end do loop_z_2
-  end do loop_t_2
+  !!!!!!!!!!! typhoon size (?) r17 !!!!!!!!!!
+  allocate(r17(nt))
+  call calculate_r17(nz, nt, nr, vtb, r17) ! calculate r17
+  out_dir = trim(out_dir) !!! out_dir
+  out_file = trim(typhoon_id)//'_'//domain//trim(out_file_suffix) !!! out_file
+  if (debug) call debug_out_file(trim(out_dir), trim(out_file))
+  call write_r17(trim(out_dir), trim(out_file), nt, r17)
 
-  ! open output file
-  out_file = trim(typhoon_id)//'_'//domain//trim(out_file_suffix)
-  open(lun, file = trim(out_dir)//'/'//trim(out_file), status = 'replace')
-
-  ! write r17 time series to file
-  do t = 1, nt
-    write(lun, *) r17(t)
-  end do
-
-  ! close output file
-  close(lun)
 
   ! deallocate arrays
   if (allocated(u)) deallocate(u)

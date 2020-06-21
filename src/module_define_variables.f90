@@ -1,13 +1,12 @@
-module module_def_vars
+module module_define_variables
   implicit none
 
   ! control variables
   integer, parameter :: strlen = 200
-  character(len = strlen) :: env, sdummy
-  character(len = strlen) :: data_dir
-  character(len = strlen) :: in_dir, in_file, in_file_suffix
+  character(len = strlen) :: env, env_name, sdummy
+  character(len = strlen) :: dat_dir, dat_file
+  character(len = strlen) :: in_file_suffix
   character(len = strlen) :: typhoon_id
-  character(len = *), parameter :: slash = '/'
   character(len = 2) :: domain
   logical :: exists, debug
 
@@ -21,14 +20,12 @@ module module_def_vars
   integer :: i, j, k, t
   integer :: uvrec, vtbrec, file_recl
   real(4) :: fff
-  real(4), parameter :: default = -9.9900000E+08
 
   ! reassigned allocatable array
-  real, allocatable, dimension(:, :) :: smn
-  real, allocatable, dimension(:)    :: r17
+  real, allocatable :: smn(:, :), r17(:)
 
   ! for writing outputs
   integer :: lun
   character(len = strlen) :: out_dir, out_file, out_file_suffix
 
-end module module_def_vars
+end module module_define_variables

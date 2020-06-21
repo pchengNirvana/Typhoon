@@ -37,11 +37,13 @@ ifeq ($(FC),ifort)
 endif
 
 fDEF = \
- module_def_vars.f90
+ module_define_constants.f90 \
+ module_define_variables.f90 \
+ module_debug.f90
 
 fOBJ = \
- module_messages.f90 \
  module_procedures.f90 \
+ module_io_environment.f90 \
  module_io_main.f90
 
 fSRC = \
@@ -59,9 +61,7 @@ MODULES = $(fMOD:.f90=.mod)
 
 EXEC = $(fSRC:.f90=.exe)
 
-extraSRC = \
- coordinate.f90 \
- symmetric.f90
+extraSRC = 
 
 extraOBJ = $(extraSRC:.f90=.o)
 

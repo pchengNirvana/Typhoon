@@ -1,11 +1,12 @@
 #!/bin/csh
 
 # set directories
-setenv ROOT_DIR "/Users/pchengnirvana/Modeling/for_MMY"
-setenv src_dir "$ROOT_DIR/src"
-setenv data_dir "$ROOT_DIR/data"
-setenv ctl_dir  "$ROOT_DIR/data"
-setenv out_dir "$ROOT_DIR/outputs"
+setenv ROOT_DIR "/Users/pchengnirvana/Modeling/for_MMY" # ROOT directory of this package
+setenv src_dir "$ROOT_DIR/src"     # directory of source codes and executables
+setenv dat_dir "$ROOT_DIR/data"    # directory of raw .dat files
+setenv ctl_dir "$ROOT_DIR/data"    # directory of .ctl files, can be different from $dat_dir
+setenv nc_dir  "$ROOT_DIR/nc"      # directory of converted .nc files
+setenv out_dir "$ROOT_DIR/outputs" # directory of output files
 
 # set typhoon number list
 set typhoon_list = (54)
@@ -31,15 +32,15 @@ setenv executable "typhoon.exe"
 set pattern = 'tdef'
 
 # debug option, T or F
-setenv debug 'F'
+setenv debug 'T'
 
 # check directories
 if (! -e $ROOT_DIR) then
   echo "Error: Working directory $ROOT_DIR does not exist"
   exit
 endif
-if (! -e $data_dir) then
-  echo "Error: Data directory $data_dir does not exist"
+if (! -e $dat_dir) then
+  echo "Error: Data directory $dat_dir does not exist"
   exit
 endif
 if (! -e $out_dir) then
@@ -53,9 +54,8 @@ foreach typhoon ( $typhoon_list )
   setenv typhoon_id $typhoon
 
   # now grep typhoon tdef value from .ctl file
-  #setenv nt `grep $pattern $data_dir/$typhoon_id/${typhoon_id}*.ctl |  awk '{print $2}'`
+  #setenv nt `grep $pattern $dat_dir/$typhoon_id/${typhoon_id}*.ctl |  awk '{print $2}'`
   setenv nt `grep $pattern $ctl_dir/$typhoon_id/${typhoon_id}*.ctl |  awk '{print $2}'`
-  echo "nt value set to $nt"
 
   # run executables
   cd $src_dir
