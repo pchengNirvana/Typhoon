@@ -11,7 +11,7 @@ setenv ROOT_DIR "/Users/pchengnirvana/Modeling/for_MMY" # ROOT directory of this
 setenv src_dir "$ROOT_DIR/src"     # directory of source codes and executables
 setenv dat_dir "$ROOT_DIR/data"    # directory of raw .dat files
 setenv ctl_dir "$ROOT_DIR/data"    # directory of .ctl files, can be different from $dat_dir
-setenv nc_dir  "$ROOT_DIR/nc"      # directory of converted .nc files
+#setenv nc_dir  "$ROOT_DIR/nc"      # directory of converted .nc files
 setenv out_dir "$ROOT_DIR/outputs" # directory of output files
 set dat_example = "1_d03_uvp.dat"  # set .dat   filename example
 set ctl_example = "1_d03.ctl"      # set .ctl   filename example
