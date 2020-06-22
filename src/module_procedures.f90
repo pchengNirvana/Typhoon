@@ -288,16 +288,16 @@ contains
 
     integer, intent (in) :: nz, nt, nr
     real(4), intent (in) :: vtb(nr, nz, nt)
-    real(4), intent (out) :: r17(nt)
+    integer, intent (out) :: r17(nt)
 
     integer :: t, k, r
 
-    r17(:) = 0.
+    r17(:) = 0
     loop_t: do t = 1, nt
       loop_z: do k = 1, nz
         loop_r: do r = 1, nr-1
           if ((vtb(r, k, t) .gt. 17) .and. (vtb(r+1, k, t) .lt. 17)) then
-            r17(t) = r * 2.
+            r17(t) = r * 2
           end if
         end do loop_r
       end do loop_z
