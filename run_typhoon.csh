@@ -7,7 +7,7 @@
 ###   .nc  - $nc_dir/$nc_example
 ###   .txt - $out_dir/$out_example
 ### If all .ctl files are in one directory, adjust the patterns below (search for 'adjustment #1' in this run script)
-setenv ROOT_DIR "/Users/pchengnirvana/Modeling/for_MMY" # ROOT directory of this package
+setenv ROOT_DIR "$PWD" # ROOT directory of this package
 setenv src_dir "$ROOT_DIR/src"     # directory of source codes and executables
 setenv dat_dir "$ROOT_DIR/data"    # directory of raw .dat files
 setenv ctl_dir "$ROOT_DIR/data"    # directory of .ctl files, can be different from $dat_dir
@@ -128,4 +128,8 @@ foreach typhoon ( $typhoon_list )
   cd $src_dir
   ./$executable
 
+  unsetenv nx
+  unsetenv ny
+  unsetenv nt
+  unsetenv nan_val
 end
