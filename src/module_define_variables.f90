@@ -9,7 +9,6 @@ module module_define_variables
   character(len = strlen) :: ctl_dir, ctl_file
   character(len = strlen) :: nc_dir,  nc_file
   character(len = strlen) :: out_dir, out_file
-  integer :: lun
   logical :: exists, debug, use_netcdf
 
   ! dimensions and indices
@@ -54,16 +53,13 @@ module module_define_variables
   real(4), allocatable :: dbz(:, :, :, :)
 
   ! derived variables
-!  real(4), allocatable :: ur(:, :, :, :)
-!  real(4), allocatable :: vt(:, :, :, :)
-!  real(4), allocatable :: vtb(:, :, :)
-!  real(4), allocatable :: urb(:, :, :)
-!  real(4), allocatable :: wb(:, :, :)
-!  real(4), allocatable :: hb(:, :, :)
-!  real(4), allocatable :: tcx(:, :)
-!  real(4), allocatable :: tcy(:, :)
-!  real(4), allocatable :: vtb10(:, :)
-!  real(4), allocatable :: smn(:, :)
-!  real(4), allocatable :: r17(:)
+  real(4), allocatable :: ur(:, :, :, :)
+  real(4), allocatable :: vt(:, :, :, :)
+  real(4), allocatable :: vtb(:, :, :)
+  real(4), allocatable :: urb(:, :, :)
+  integer, allocatable :: tcx(:, :)
+  integer, allocatable :: tcy(:, :)
+  real(4), allocatable :: smn(:, :)
+  real(4), allocatable :: r17(:)
 
 end module module_define_variables

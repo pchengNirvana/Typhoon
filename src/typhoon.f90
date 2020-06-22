@@ -10,21 +10,6 @@ program typhoon
     debug_check_read_variables
   implicit none
 
-  !!! defind derived arrays here if desired
-  !!! otherwise, define in module_define_variables.f90
-  ! derived variables
-  real(4), allocatable :: ur(:, :, :, :)
-  real(4), allocatable :: vt(:, :, :, :)
-  real(4), allocatable :: vtb(:, :, :)
-  real(4), allocatable :: urb(:, :, :)
-  real(4), allocatable :: wb(:, :, :)
-  real(4), allocatable :: hb(:, :, :)
-  real(4), allocatable :: tcx(:, :)
-  real(4), allocatable :: tcy(:, :)
-  real(4), allocatable :: vtb10(:, :)
-  real(4), allocatable :: smn(:, :)
-  real(4), allocatable :: r17(:)
-
   ! read environment settings
   call read_env_settings
   if (debug) call debug_dimension_settings(nx, ny, nz, nt, nr)
@@ -89,9 +74,7 @@ program typhoon
   allocate(ur(nx, ny, nz, nt))
   allocate(vt(nx, ny, nz, nt))
   allocate(vtb(nr, nz, nt))
-!  allocate(urb(nr, nz, nt))
-!  allocate(wb(nr, nz, nt))
-!  allocate(hb(nr, nz, nt))
+  !allocate(urb(nr, nz, nt))
   allocate(r17(nt))
 
   ! assign initial value
@@ -142,10 +125,8 @@ program typhoon
   if (allocated(r17)) deallocate(r17)
   if (allocated(ur)) deallocate(ur)
   if (allocated(vt)) deallocate(vt)
-  if (allocated(vtb)) deallocate(vtb)
   if (allocated(urb)) deallocate(urb)
-  if (allocated(wb)) deallocate(wb)
-  if (allocated(hb)) deallocate(hb)
+  if (allocated(vtb)) deallocate(vtb)
   ! 2D .dat variables
   if (allocated(xlat)) deallocate(xlat)
   if (allocated(xlong)) deallocate(xlong)

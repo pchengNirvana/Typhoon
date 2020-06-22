@@ -26,40 +26,41 @@ contains
 
     integer, intent (in) :: nx, ny, nz, nt
     real(4), intent (in) :: u(nx, ny, nz, nt), v(nx, ny, nz, nt)
-    real(4), intent (in) :: tcx(nz, nt), tcy(nz, nt)
+    integer, intent (in) :: tcx(nz, nt), tcy(nz, nt)
     real(4), intent (out) :: ur(nx, ny, nz, nt), vt(nx, ny, nz, nt)
 
     integer :: i, j, k, t
-    real(4) :: xc, yc, sitam, sita
+    integer :: xc, yc
+    real(4) :: sitam, sita
 
     loop_t: do t = 1, nt
       loop_z: do k = 1, nz
         loop_y: do j = 1, ny
           loop_x: do i = 1, nx
-            xc = float(i) - tcx(k, t)
-            yc = float(j) - tcy(k, t)
+            xc = i - tcx(k, t)
+            yc = j - tcy(k, t)
 
-            if (xc .eq. 0.) then
-              if (yc .ge. 0.) then
+            if (xc .eq. 0) then
+              if (yc .ge. 0) then
                 sita = .5 * pi
               else
                 sita = 1.5 * pi
               end if
 
-            else ! if xc .ne. 0.
-              sitam = abs(atan(yc/xc))
+            else ! if xc .ne. 0
+              sitam = abs(atan(1.*yc/xc))
 
-              if (xc .gt. 0.) then
-                if (yc .ge. 0.) then
+              if (xc .gt. 0) then
+                if (yc .ge. 0) then
                   sita = sitam
                 else
                   sita = 2. * pi - sitam
                 end if
 
-              else ! if xc .lt. 0.
-                if (yc .ge. 0.) then
+              else ! if xc .lt. 0
+                if (yc .ge. 0) then
                   sita = pi - sitam
-                else ! if yc .lt. 0.
+                else ! if yc .lt. 0
                   sita = pi + sitam
                 end if
               end if
@@ -93,7 +94,8 @@ contains
     real(4), intent (in) :: scalar(nx, ny)
     real(4), intent (out) :: scinto
 
-    integer :: ii, jj, mm, nn
+    integer :: ii, jj
+    real(4) :: mm, nn
     real(4) :: a, b, c, d, e, fq, h, p, t1, t2
 
     ii = int(gx)
@@ -225,8 +227,8 @@ contains
 
           loop_s: do s = 1, 360
             sita = float(s) * degtorad
-            gx = tcx(k, t) + float(n-1) * cos(sita)
-            gy = tcy(k, t) + float(n-1) * sin(sita)
+            gx = cos(sita) * (n-1) + tcx(k, t)
+            gy = sin(sita) * (n-1) + tcy(k, t)
 
             if (gx .lt. 2. .or. gx .gt. nx - 1. .or. &
                 gy .lt. 2. .or. gy .gt. ny - 1.) then
@@ -249,6 +251,26 @@ contains
       end do loop_z
     end do loop_t
   end subroutine symmetric
+
+  subroutine find_tropical_cyclone_center &
+    (nx, ny, nz, nt, slp, tcx, tcy, smn)
+    implicit none
+
+    integer, intent (in) :: nx, ny, nz, nt
+    real(4), intent (in) :: slp
+    integer, intent (out) :: tcx
+    real(4), intent (out) :: tcy
+
+    integer :: l, k
+    
+    loop_t: do l = 1, nt
+      loop_z: do k = 1, nz
+
+
+      end do loop_z
+    end do loop_t
+
+  end subroutine find_tropical_cyclone_center
 
   subroutine calculate_r17 &
     (nz, nt, nr, vtb, r17)
