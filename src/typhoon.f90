@@ -56,8 +56,8 @@ program typhoon
   if (.not. use_netcdf) then
     call check_in_file_exists(trim(dat_dir), trim(dat_file))
     if (debug) call debug_in_file(trim(dat_dir), trim(dat_file))
-!    call read_dat_file(trim(dat_dir), trim(dat_file), nx, ny, nz, zmax, nt, &
-!      file_recl, u10 = u10, v10 = v10, slp = slp)
+    call read_dat_file(trim(dat_dir), trim(dat_file), nx, ny, nz, zmax, nt, &
+      file_recl, u10 = u10, v10 = v10, slp = slp)
    if (debug) then
       call debug_check_read_variables(nx, ny, nz, nt, nan_val, &
         u10 = u10, v10 = v10, slp = slp)
