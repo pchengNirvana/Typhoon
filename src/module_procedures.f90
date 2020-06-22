@@ -95,8 +95,7 @@ contains
     real(4), intent (out) :: scinto
 
     integer :: ii, jj
-    real(4) :: mm, nn
-    real(4) :: a, b, c, d, e, fq, h, p, t1, t2
+    real(4) :: mm, nn, a, b, c, d, e, fq, h, p, t1, t2
 
     ii = int(gx)
     jj = int(gy)
@@ -201,7 +200,7 @@ contains
     implicit none
 
     integer, intent (in) :: nx, ny, nz, nt, nr
-    real(4), intent (in) :: tcx(nz, nt), tcy(nz, nt)
+    integer, intent (in) :: tcx(nz, nt), tcy(nz, nt)
     real(4), intent (in) :: vt(nx, ny, nz, nt)
     real(4), intent (out) :: vtb(nr, nz, nt)
 
@@ -253,23 +252,34 @@ contains
   end subroutine symmetric
 
   subroutine find_tropical_cyclone_center &
-    (nx, ny, nz, nt, slp, tcx, tcy, smn)
+    (nx, ny, nz, nt, pressure, tcx, tcy, smn)
     implicit none
 
     integer, intent (in) :: nx, ny, nz, nt
-    real(4), intent (in) :: slp
-    integer, intent (out) :: tcx
-    real(4), intent (out) :: tcy
+    real(4), intent (in) :: pressure(nx, ny, nz, nt)
+    integer, intent (out) :: tcx(nz, nt), tcy(nz, nt)
+    real(4), intent (out) :: smn(nz, nt)
 
-    integer :: l, k
+    integer :: i, j, k, l
+
+    tcx = 0
+    tcy = 0
+    smn = 0.
     
     loop_t: do l = 1, nt
       loop_z: do k = 1, nz
-
-
+      smn(k, l) = 1.e10
+        loop_y: do j = 1, ny
+          loop_x: do i = 1, nx
+            if (pressure(i, j, k, l) .le. smn(k, l)) then
+              smn(k, l) = pressure(i, j, k, l)
+              tcy(k, l) = j
+              tcx(k, l) = i
+            end if
+          end do loop_x
+        end do loop_y
       end do loop_z
     end do loop_t
-
   end subroutine find_tropical_cyclone_center
 
   subroutine calculate_r17 &

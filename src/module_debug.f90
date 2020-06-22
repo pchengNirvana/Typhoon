@@ -87,7 +87,7 @@ contains
     integer, intent (in) :: time, height
     real(4), intent (in) :: varmax, varmin, varave
 
-    write(*, '(5x, a10, ",", i6, ",", i6, ",", f8.2, ",", f8.2, ",", f8.2)') &
+    write(*, '(5x, a10, ",", i6, ",  ", i6, ",", f8.2, ",", f8.2, ",", f8.2)') &
       varname, time, height, varmax, varmin, varave
   end subroutine debug_check_3D_variable_values
 
@@ -322,9 +322,27 @@ contains
         end if
       end do loop_z_2
     end do loop_t_2
-
-
   end subroutine debug_check_read_variables
+
+  subroutine debug_tropical_cyclone_center &
+    (nz, nt, tcx, tcy, smn)
+    implicit none
+
+    integer, intent (in) :: nz, nt
+    integer, intent (in) :: tcx(nz, nt), tcy(nz, nt)
+    real(4), intent (in) :: smn(nz, nt)
+
+    integer :: k, l
+
+    write(*, '(a)') 'DEBUG: Tropical cyclone center'
+    write(*, '(a)') '       time, height, xindex, yindex,  pressure'
+    loop_t: do l = 1, nt
+      loop_z: do k = 1, nz
+        write(*, '(5x, i6, ", ", i6, ", ", i6, ", ", i6, ",", f10.2)') &
+          l, k, tcx(k, l), tcy(k, l), smn(k, l)
+      end do loop_z
+    end do loop_t
+  end subroutine debug_tropical_cyclone_center
 
   subroutine check_out_directory_exists &
     (directory)

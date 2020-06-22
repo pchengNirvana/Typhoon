@@ -4,10 +4,11 @@ program typhoon
   use module_define_variables
   use module_io_environment, only : read_env_settings
   use module_io_main, only : read_dat_file, write_r17
-  use module_procedures, only : coordinate, symmetric, calculate_r17
+  use module_procedures, only : coordinate, symmetric, calculate_r17, &
+    find_tropical_cyclone_center
   use module_debug, only : debug_in_file, check_in_file_exists, &
     debug_out_file, check_out_directory_exists, debug_dimension_settings, &
-    debug_check_read_variables
+    debug_check_read_variables, debug_tropical_cyclone_center
   implicit none
 
   ! read environment settings
@@ -55,8 +56,8 @@ program typhoon
   if (.not. use_netcdf) then
     call check_in_file_exists(trim(dat_dir), trim(dat_file))
     if (debug) call debug_in_file(trim(dat_dir), trim(dat_file))
-    call read_dat_file(trim(dat_dir), trim(dat_file), nx, ny, nz, zmax, nt, &
-      file_recl, u10 = u10, v10 = v10, slp = slp)
+!    call read_dat_file(trim(dat_dir), trim(dat_file), nx, ny, nz, zmax, nt, &
+!      file_recl, u10 = u10, v10 = v10, slp = slp)
    if (debug) then
       call debug_check_read_variables(nx, ny, nz, nt, nan_val, &
         u10 = u10, v10 = v10, slp = slp)
@@ -77,33 +78,9 @@ program typhoon
   !allocate(urb(nr, nz, nt))
   allocate(r17(nt))
 
-  ! assign initial value
-  smn = 0.
-  tcx = 0.
-  tcy = 0.
-
-  ! I would recommend to write calculations in module_procedures.f90, and
-  ! load it when nessary using 'use module_procedures, only : <subroutine name>
-  ! like what I did for calculating r17 below
-  ! loop over each dimension to find smn, tcx, tcy
-  loop_t_1: do l = 1, nt
-    loop_z_1: do k = 1, nz
-      smn(k, l) = slp(120, 120, l) ! *** what is this 120 *** !
-      loop_y_1: do j = 1, ny
-        loop_x_1: do i = 1, nx
-          if (slp(i, j, l) .le. smn(k, l)) then
-            smn(k, l) = slp(i, j, l)
-            tcy(k, l) = j
-            tcx(k, l) = i
-          end if
-        end do loop_x_1
-      end do loop_y_1
-    end do loop_z_1
-  end do loop_t_1
-  if (debug) then
-    !print*, tcx
-    !print*, tcy
-  end if
+  ! fine indices and pressure of tropical cyclone center
+  call find_tropical_cyclone_center(nx, ny, nz, nt, slp, tcx, tcy, smn)
+  if (debug) call debug_tropical_cyclone_center(nz, nt, tcx, tcy, smn)
 
   ! convert u10/v10 to polar coordinate
   call coordinate(nx, ny, nz, nt, u10, v10, tcx, tcy, ur, vt)
@@ -115,6 +92,7 @@ program typhoon
   !!!!!!!!!!!!!!! now write final results to out_file !!!!!!!!!!!!!!!!
   if (debug) call debug_out_file(trim(out_dir), trim(out_file))
   call write_r17(trim(out_dir), trim(out_file), nt, r17)
+
 
   ! deallocate arrays, use if statement to make sure it won't attempt to 
   ! deallocate arrays when not being allocated

@@ -62,4 +62,9 @@ module module_define_variables
   real(4), allocatable :: smn(:, :)
   real(4), allocatable :: r17(:)
 
+  ! fake variables
+  real(4), allocatable :: u10_fake(:, :, :, :)
+  real(4), allocatable :: v10_fake(:, :, :, :)
+  real(4), allocatable :: slp_fake(:, :, :, :)
+
 end module module_define_variables
