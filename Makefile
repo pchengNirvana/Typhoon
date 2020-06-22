@@ -1,4 +1,3 @@
-
 .SUFFIXES: .mod .o .f90 .exe
 
 # Set compilers and paths
