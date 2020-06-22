@@ -16,7 +16,7 @@ setenv out_dir "$ROOT_DIR/outputs" # directory of output files
 set dat_example = "1_d03_uvp.dat"  # set .dat   filename example
 set ctl_example = "1_d03.ctl"      # set .ctl   filename example
 set nc_example  = "1_d03.nc"       # set .nc    filename example
-set out_example = "1_03_size.txt"  # set output filename example, can change to any suffix, but need domain number
+set out_example = "1_d03_size.txt"  # set output filename example, can change to any suffix, but need domain number
 
 # main dimension settings
 # uncomment to overwrite dimension info in .ctl files

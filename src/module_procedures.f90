@@ -268,7 +268,7 @@ contains
     
     loop_t: do l = 1, nt
       loop_z: do k = 1, nz
-      smn(k, l) = 1.e10
+      smn(k, l) = pressure(120, 120, k, l)
         loop_y: do j = 1, ny
           loop_x: do i = 1, nx
             if (pressure(i, j, k, l) .le. smn(k, l)) then
