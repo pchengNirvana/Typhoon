@@ -60,7 +60,7 @@ module module_define_variables
   integer, allocatable :: tcx(:, :)
   integer, allocatable :: tcy(:, :)
   real(4), allocatable :: smn(:, :)
-  integer, allocatable :: r17(:)
+  real(4), allocatable :: r17(:)
 
   ! fake variables
   real(4), pointer :: u10_fake(:, :, :, :)

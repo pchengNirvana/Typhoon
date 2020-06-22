@@ -206,7 +206,7 @@ contains
 
     character(len = *), intent (in) :: directory, filename
     integer, intent (in) :: nt
-    integer, intent (in) :: r17(nt)
+    real(4), intent (in) :: r17(nt)
 
     integer :: lun
     integer :: t
