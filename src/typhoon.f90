@@ -78,12 +78,17 @@ program typhoon
   !allocate(urb(nr, nz, nt))
   allocate(r17(nt))
 
+  ! assign fake arrays 3D => 4D
+  slp_fake(1:nx, 1:ny, 1:1, 1:nt) => slp(:, :, :)
+  u10_fake(1:nx, 1:ny, 1:1, 1:nt) => u10(:, :, :)
+  v10_fake(1:nx, 1:ny, 1:1, 1:nt) => v10(:, :, :)
+
   ! fine indices and pressure of tropical cyclone center
-  call find_tropical_cyclone_center(nx, ny, nz, nt, slp, tcx, tcy, smn)
+  call find_tropical_cyclone_center(nx, ny, nz, nt, slp_fake, tcx, tcy, smn)
   if (debug) call debug_tropical_cyclone_center(nz, nt, tcx, tcy, smn)
 
   ! convert u10/v10 to polar coordinate
-  call coordinate(nx, ny, nz, nt, u10, v10, tcx, tcy, ur, vt)
+  call coordinate(nx, ny, nz, nt, u10_fake, v10_fake, tcx, tcy, ur, vt)
   call symmetric(nx, ny, nz, nt, nr, tcx, tcy, vt, vtb)
 
   ! call subroutine to calculate r17

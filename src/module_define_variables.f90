@@ -22,8 +22,8 @@ module module_define_variables
   real(4), allocatable :: q2(:, :, :)
   real(4), allocatable :: t2(:, :, :)
   real(4), allocatable :: psfc(:, :, :)
-  real(4), allocatable :: u10(:, :, :)
-  real(4), allocatable :: v10(:, :, :)
+  real(4), allocatable, target :: u10(:, :, :)
+  real(4), allocatable, target :: v10(:, :, :)
   real(4), allocatable :: hgt(:, :, :)
   real(4), allocatable :: tsk(:, :, :)
   real(4), allocatable :: rainc(:, :, :)
@@ -32,7 +32,7 @@ module module_define_variables
   real(4), allocatable :: qfx(:, :, :)
   real(4), allocatable :: lh(:, :, :)
   real(4), allocatable :: sst(:, :, :)
-  real(4), allocatable :: slp(:, :, :)
+  real(4), allocatable, target :: slp(:, :, :)
   real(4), allocatable :: maxdbz(:, :, :)
 
   ! .dat 3D variables
@@ -63,8 +63,8 @@ module module_define_variables
   real(4), allocatable :: r17(:)
 
   ! fake variables
-  real(4), allocatable :: u10_fake(:, :, :, :)
-  real(4), allocatable :: v10_fake(:, :, :, :)
-  real(4), allocatable :: slp_fake(:, :, :, :)
+  real(4), pointer :: u10_fake(:, :, :, :)
+  real(4), pointer :: v10_fake(:, :, :, :)
+  real(4), pointer :: slp_fake(:, :, :, :)
 
 end module module_define_variables
