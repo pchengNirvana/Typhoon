@@ -5,8 +5,8 @@ ROOT = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 SRCDIR = $(PWD)/src
 
 FC      = $(F90)
-LIBS    = -L$(NETCDF)/lib #-lnetcdff
-INCLUDE = -I$(NETCDF)/include
+LIBS    = #-L$(NETCDF)/lib -lnetcdff
+INCLUDE = #-I$(NETCDF)/include
 
 ifeq ($(FC),lf95)
   FFLAGS = --g

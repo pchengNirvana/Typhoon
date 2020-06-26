@@ -6,9 +6,7 @@ program typhoon
   use module_io_main, only : read_dat_file, write_r17
   use module_procedures, only : coordinate, symmetric, calculate_r17, &
     find_tropical_cyclone_center
-  use module_debug, only : debug_in_file, check_in_file_exists, &
-    debug_out_file, check_out_directory_exists, debug_dimension_settings, &
-    debug_check_read_variables, debug_tropical_cyclone_center
+  use module_debug
   implicit none
 
   ! read environment settings
